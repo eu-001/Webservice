@@ -16,11 +16,20 @@
         <span id="hour"></span> 시 : <span id="minute"></span> 분 :
             <span id="second"></span> 초
         </p>
+        <p>
+            <label>지역선택:
+                <select id="wea_sel">
+                    <option value="">지역선택</option>
+                    <option selected value="gwangju">광주</option>
+                    <option value="damyang">담양</option>
+                </select></label>
+        </p>
         <p>어제의 날씨</p>
         <p>오늘의 날씨</p>
         <p>내일의 날씨</p>
     </div>
 <script>
+    let weather_local="gwangju"
     let ti = document.getElementById("time")
     let y = document.getElementById("year")
     let mo = document.getElementById("month")
@@ -53,6 +62,20 @@
       //  let res = await fetch("https://openweathermap.org/city/1841811")
         //console.log(await res.readText())
     //}
+    //좌표주소 http://api.openweathermap.org/geo/1.0/direct?q=gwangju,KR&appid=7b9f7f492156998d71b424d560c28e72
+    //날씨주소 https://api.open-meteo.com/v1/forecast?latitude=35.1594647&longitude=126.8515034&&current_weather=true&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m
+     const wea_sel = document.getElementById("wea_sel")
+    wea_sel.addEventListener("change",myweather)
+    async function myweather(){
+        if(wea_sel.value){
+            weather_local=wea_sel.value
+        }
+        rl_url=`http://api.openweathermap.org/geo/1.0/direct?q=${weather_local},KR&appid=7b9f7f492156998d71b424d560c28e72`
+        res = await fetch(rl_url)
+        rl_data = await res.json()
+        console.log(rl_data)
+    }
+    myweather()
 </script>
 </body>
 </html>

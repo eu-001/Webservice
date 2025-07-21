@@ -3,8 +3,9 @@ from flask import Flask, render_template, url_for, request,json
 app = Flask(__name__)
 tardata = {"이름":"홍길동","나이":20}
 @app.route("/examp")
-def examp():
-    return render_template("test.html")
+@app.route("/examp/<hname>")
+def examp(hname="test"):
+    return render_template(f"{hname}.html")
 @app.route("/responsejson")
 def repjson():
     jtardata = json.jsonify(tardata) #dict -> json 문자화
