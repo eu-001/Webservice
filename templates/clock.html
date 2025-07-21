@@ -1,0 +1,58 @@
+<!--clock.html-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h3> [ 광주 컴퓨터 기술학원 - 정보보안 적대적생성모델 클래스 ] </h3>
+    <div>
+        <p>
+        <span id="year"></span> 년 <span id="month"></span> 월
+            <span id="day"></span> 일 <span id="week"></span>
+        </p>
+        <p id="time">
+        <span id="hour"></span> 시 : <span id="minute"></span> 분 :
+            <span id="second"></span> 초
+        </p>
+        <p>어제의 날씨</p>
+        <p>오늘의 날씨</p>
+        <p>내일의 날씨</p>
+    </div>
+<script>
+    let ti = document.getElementById("time")
+    let y = document.getElementById("year")
+    let mo = document.getElementById("month")
+    let di = document.getElementById("day")
+    let w = document.getElementById("week")
+    let h = document.getElementById("hour")
+
+    let mi = document.getElementById("minute")
+    let s = document.getElementById("second")
+    let warr =["월요일","화요일","수요일","목요일","금요일","토요일","일요일"]
+    let colormap = ["black","black","black","black","green","blue","red"]
+    setInterval(function(){
+        let d = new Date()
+        y.innerText = d.getFullYear()
+        mo.innerText = d.getMonth()+1
+        di.innerText = d.getDate()
+        w.innerText = warr[d.getDay()-1]
+        w.style.color=colormap[d.getDay()-1]
+        h.innerText = d.getHours()
+        if(d.getHours()>11){
+            ti.style.color="orange"
+        }else{
+            ti.style.color="blue"
+        }
+        mi.innerText = d.getMinutes()
+        s.innerText = d.getSeconds()
+    },1000)
+   // getWeather()
+    //async function getWeather(){
+      //  let res = await fetch("https://openweathermap.org/city/1841811")
+        //console.log(await res.readText())
+    //}
+</script>
+</body>
+</html>
