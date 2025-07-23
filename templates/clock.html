@@ -1,81 +1,185 @@
 <!--clock.html-->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
 </head>
+
 <body>
     <h3> [ 광주 컴퓨터 기술학원 - 정보보안 적대적생성모델 클래스 ] </h3>
+
     <div>
         <p>
-        <span id="year"></span> 년 <span id="month"></span> 월
+            <span id="year"></span> 년 <span id="month"></span> 월
             <span id="day"></span> 일 <span id="week"></span>
         </p>
         <p id="time">
-        <span id="hour"></span> 시 : <span id="minute"></span> 분 :
+            <span id="hour"></span> 시 : <span id="minute"></span> 분 :
             <span id="second"></span> 초
         </p>
+        <input type="text" placeholder="국가명.지역명" id="intext" />
         <p>
-            <label>지역선택:
+            <label>지역선택 :
                 <select id="wea_sel">
                     <option value="">지역선택</option>
-                    <option selected value="gwangju">광주</option>
-                    <option value="damyang">담양</option>
-                </select></label>
-        </p>
-        <p>어제의 날씨</p>
-        <p>오늘의 날씨</p>
-        <p>내일의 날씨</p>
-    </div>
-<script>
-    let weather_local="gwangju"
-    let ti = document.getElementById("time")
-    let y = document.getElementById("year")
-    let mo = document.getElementById("month")
-    let di = document.getElementById("day")
-    let w = document.getElementById("week")
-    let h = document.getElementById("hour")
+                    <option selected value="KR.gwangju">광주</option>
+                    <option value="KR.damyang">담양</option>
+                    <option value="KR.hwasun">화순</option>
+                    <option value="KR.seoul">서울</option>
+                    <option value="US.뉴욕">뉴옥</option>
+                    <option value="JP.tokyo">도쿄</option>
+                    <option value="영국.런던">런던</option>
 
-    let mi = document.getElementById("minute")
-    let s = document.getElementById("second")
-    let warr =["월요일","화요일","수요일","목요일","금요일","토요일","일요일"]
-    let colormap = ["black","black","black","black","green","blue","red"]
-    setInterval(function(){
-        let d = new Date()
-        y.innerText = d.getFullYear()
-        mo.innerText = d.getMonth()+1
-        di.innerText = d.getDate()
-        w.innerText = warr[d.getDay()-1]
-        w.style.color=colormap[d.getDay()-1]
-        h.innerText = d.getHours()
-        if(d.getHours()>11){
-            ti.style.color="orange"
-        }else{
-            ti.style.color="blue"
-        }
-        mi.innerText = d.getMinutes()
-        s.innerText = d.getSeconds()
-    },1000)
-   // getWeather()
-    //async function getWeather(){
-      //  let res = await fetch("https://openweathermap.org/city/1841811")
+
+                </select>
+            </label>
+        </p>
+        <p>오늘의 날씨</p>
+        <p id="weather_today" style="border:2px solid red;box-shadow:2px 2px 2px gray">
+        </p>
+        <p>내일의 날씨</p>
+        <p id="weather_1" style="border:2px solid green;box-shadow:2px 2px 2px gray">
+        </p>
+        <p>모레의 날씨</p>
+        <p id="weather_2" style="border:2px solid green;box-shadow:2px 2px 2px gray">
+        </p>
+        <p>글피의 날씨</p>
+        <p id="weather_3" style="border:2px solid green;box-shadow:2px 2px 2px gray">
+        </p>
+        <p>사흘의 날씨</p>
+        <p id="weather_4" style="border:2px solid green;box-shadow:2px 2px 2px gray">
+        </p>
+
+    </div>
+    <script>
+        let weather_contry = "KR"
+        let weather_local = "gwangju"
+        let ti = document.getElementById("time")
+        let y = document.getElementById("year")
+        let mo = document.getElementById("month")
+        let di = document.getElementById("day")
+        let w = document.getElementById("week")
+        let h = document.getElementById("hour")
+
+        let mi = document.getElementById("minute")
+        let s = document.getElementById("second")
+        let warr = ["월요일", "화요일", "수요일", "목요일", "금요일", "토요일", "일요일"]
+        let colormap = ["black", "black", "black", "black", "green", "blue", "red"]
+        setInterval(function () {
+            let d = new Date()
+            y.innerText = d.getFullYear()
+            mo.innerText = d.getMonth() + 1
+            di.innerText = d.getDate()
+            w.innerText = warr[d.getDay() - 1]
+            w.style.color = colormap[d.getDay() - 1]
+            h.innerText = d.getHours()
+            if (d.getHours() > 11) {
+                ti.style.color = "orange"
+            } else {
+                ti.style.color = "blue"
+            }
+            mi.innerText = d.getMinutes()
+            s.innerText = d.getSeconds()
+        }, 1000)
+        // getWeather()
+        //async function getWeather(){
+        //  let res = await fetch("https://openweathermap.org/city/1841811")
         //console.log(await res.readText())
-    //}
-    //좌표주소 http://api.openweathermap.org/geo/1.0/direct?q=gwangju,KR&appid=7b9f7f492156998d71b424d560c28e72
-    //날씨주소 https://api.open-meteo.com/v1/forecast?latitude=35.1594647&longitude=126.8515034&&current_weather=true&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m
-     const wea_sel = document.getElementById("wea_sel")
-    wea_sel.addEventListener("change",myweather)
-    async function myweather(){
-        if(wea_sel.value){
-            weather_local=wea_sel.value
+        //}
+        //좌표주소 http://api.openweathermap.org/geo/1.0/direct?q=gwangju,KR&appid=7b9f7f492156998d71b424d560c28e72
+        //날씨 주소 https://api.open-meteo.com/v1/forecast?latitude=35.1594647&longitude=126.8515034&&current_weather=true&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m
+
+        const wea_sel = document.getElementById("wea_sel")
+        wea_sel.addEventListener("change", myweather)
+        async function myweather() {//위도, 경도 수신
+            if (wea_sel.value) {
+                [weather_contry, weather_local] = wea_sel.value.split(".")
+                console.log(weather_contry)
+                console.log(weather_local)
+            }
+            let rl_url = `http://api.openweathermap.org/geo/1.0/direct?q=${weather_local},${weather_contry}&appid=7b9f7f492156998d71b424d560c28e72`
+            console.log(rl_url)
+            const res = await fetch(rl_url)
+            const rl_data = await res.json()
+            getWeather([rl_data[0]["local_names"]["ko"], rl_data[0]["local_names"]["en"]],
+                rl_data[0]["lat"], rl_data[0]["lon"])
         }
-        rl_url=`http://api.openweathermap.org/geo/1.0/direct?q=${weather_local},KR&appid=7b9f7f492156998d71b424d560c28e72`
-        res = await fetch(rl_url)
-        rl_data = await res.json()
-        console.log(rl_data)
-    }
-    myweather()
-</script>
+        async function getWeather(names, lat, lon) {// 날씨데이터 수신 및 화면 갱신
+            console.log(names)
+            const we_url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&&current_weather=true&current=temperature_2m,wind_speed_10m&hourly=temperature_2m,weather_code,wind_speed_10m,wind_direction_10m`
+            const res = await fetch(we_url)
+            const we_data = await res.json()
+            console.log(we_data)
+            let dt = new Date(we_data["current_weather"]["time"])//GMT 영국 런던시간
+            dt.setHours(dt.getHours() + 9)//UTC 시간변경 +9
+            //console.log(dt)
+            //we_data["current_weather_units"]["windspeed"] 풍속단위
+            //we_data["current_weather_units"]["temperature"] 온도단위
+            //we_data["current_weather_units"]["winddirection"] 바람방향단위
+            // console.log(wmo_codes[we_data["current_weather"]["weathercode"]])//날씨
+            // console.log(we_data["current_weather"]["winddirection"])//바람방향
+            // console.log(we_data["current_weather"]["temperature"])//온도
+            // console.log(we_data["current_weather"]["windspeed"])//풍속
+            let datas = {
+                weather: we_data["current_weather"]["weathercode"],
+                wind_dt: we_data["current_weather"]["winddirection"] + " "
+                    + we_data["current_weather_units"]["winddirection"],
+                wind_spd: we_data["current_weather"]["windspeed"] + " "
+                    + we_data["current_weather_units"]["windspeed"],
+                temp: we_data["current_weather"]["temperature"] + " "
+                    + we_data["current_weather_units"]["temperature"],
+                date_time: dt
+            }
+            write_weather(weather_today, datas)
+            console.log(we_data["hourly"])
+            //temperature_2m time  weather_code  wind_direction_10m wind_speed_10m
+            let date_num = 1;
+            for (let inx = 24; inx < 168 && date_num < 5; inx += 24) {
+                const tm_time = new Date(we_data["hourly"]["time"][inx])//GMT 영국 런던시간
+                tm_time.setHours(tm_time.getHours() + 9)//UTC 시간변경 +9
+                let tom_datas = {
+                    weather: we_data["hourly"]["weather_code"][inx],
+                    wind_dt: we_data["hourly"]["wind_direction_10m"][inx] + " "
+                        + we_data["current_weather_units"]["winddirection"],
+                    wind_spd: we_data["hourly"]["wind_speed_10m"][inx] + " "
+                        + we_data["current_weather_units"]["windspeed"],
+                    temp: we_data["hourly"]["temperature_2m"][inx] + " "
+                        + we_data["current_weather_units"]["temperature"],
+                    date_time: tm_time
+                }
+                write_weather(document.getElementById(`weather_${date_num}`), tom_datas)
+                date_num++
+            }
+        }
+        myweather()
+        wmo_codes = {0:["맑음","sunny","red"], 1:["대체로 맑음","wb_sunny","light orange"], 2:["부분적 흐림","partly_cloudy_day","sky"], 3:["흐림","cloud","navy"], 45:["옅은 안개","foggy","gray"],
+            48:["서리 낀 안개","mode_cool","gray"], 51:["약한 이슬비 레벨1","water_do","lightgray"],52:["약한 이슬비 레벨2","water_do","gray"], 53:["약한 이슬비 레벨3","water_do","darkgray"],
+            54:["약한 이슬비 레벨4","water_do","black"], 55:["약한 이슬비 레벨5","shower","black"],61:["비 레벨1","rainy","mint"], 62:["비 레벨2","rainy_light","skyblue"], 63:["비 레벨3","rainy_light","blue"],
+            64:["비 레벨4","rainy_heavy","darkblue"], 65:["비 레벨5","rainy_heavy","navy"], 66:["약한 우박","weather_hail","skyblue"], 67:["강한 우박","weather_hail","blue"], 71:["약한 눈","weather_mix","skyblue"],
+            72:["보통 눈","snowing","blue"],73:["강한 눈","snowing_heavy","navy"], 74:["약한 폭설","mode_cool","skyblue"], 75:["강한 폭설","mode_cool","navy"], 80:["약한 소나기","umbrella","skyblue"],
+            81:["보통 소나기","umbrella","blue"], 82:["강한 소나기","umbrella","navy"], 95:["천둥번개","thunderstorm","darkblue"], 96:["번개 + 우박 레벨1","water_ec","yellow"],97:["번개 + 우박 레벨2","water_ec","orange"],
+            98:["번개 + 우박 레벨3","water_ec","red"], 99:["번개 + 우박 레벨4","water_ec","darkred"]
+        }
+        const weather_today = document.getElementById("weather_today");
+        function write_weather(ele, data) {
+            const icon = `<span style="color:${wmo_codes[data["weather"]][2]}" class="material-symbols-outlined">
+                ${wmo_codes[data["weather"]][1]}</span> <span>${data.date_time.toLocaleString()}</span>`
+            let inHtml = icon;
+            inHtml += `<br>＊날씨: ${wmo_codes[data["weather"]][0]} &nbsp;&nbsp;&nbsp;
+            ＊온도: ${data["temp"]} &nbsp;&nbsp;&nbsp; ＊풍속: ${data["wind_spd"]}
+            &nbsp;&nbsp;&nbsp; ＊풍향: ${data["wind_dt"]}`
+
+            ele.innerHTML = inHtml
+        }
+
+
+
+
+    </script>
 </body>
+
 </html>
